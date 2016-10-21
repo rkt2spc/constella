@@ -1,0 +1,83 @@
+<div class="btn-group" role="group" aria-label="...">
+  <a  role="button" 
+      ng-class="tripType==='oneway-trip'? 'btn btn-default active' : 'btn btn-default'"
+      ng-click="tripType = 'oneway-trip'">Oneway</a>
+  <a  role="button" 
+      ng-class="tripType==='round-trip'? 'btn btn-default active' : 'btn btn-default'"
+      ng-click="tripType = 'round-trip'">Round Trip</a>
+</div>
+
+
+<form class="row" ng-submit="next()">
+
+  <!-- Location -->
+  <div class="col-md-3">
+    <label>Where are you flying from</label>
+    <select class="form-control">
+      <option value="" disabled selected>Select your option</option>
+      <option value="1">1</option>
+      <optgroup ng-repeat="(region, locations) in groupedLocation" label="{{region}}">
+        <option ng-repeat="location in locations">{{location.name}}</option>
+      </optgroup>
+    </select>
+  </div>
+  <div class="col-md-3">
+    <label>Where are you flying to</label>
+    <select class="form-control">
+      <option value="" disabled selected>Select your option</option>
+      <optgroup label="GEGE">
+        <option>1</option>
+        <option>2</option>
+      </optgroup>
+      <optgroup label="XAXA">
+        <option>3</option>
+        <option>4</option>
+      </optgroup>
+    </select>
+  </div>
+
+  <!-- Schedule -->
+  <div class="col-md-2 col-md-offset-1 form-group">
+    <label>Departing Date</label>
+    <input type="date" class="form-control">
+  </div>
+  <div class="col-md-2 form-group" ng-show="tripType==='round-trip'">
+    <label>Returning Date</label>
+    <input type="date" class="form-control">
+  </div>
+
+  <!-- Passengers -->
+  <div class="col-md-7">
+    <label>Passengers</label>
+
+    <div class="form-inline">
+
+      <div class="form-group">
+        <input type="number" class="form-control" placeholder="Adults" min="0">
+        <small class="help-block">Adults (&ge;12 yrs)</small>
+      </div>
+
+      <div class="form-group">
+        <input type="number" class="form-control" placeholder="Children" min="0">
+        <small class="help-block">Children (2&lt;12 yrs)</small>
+      </div>
+
+      <div class="form-group">
+        <input type="number" class="form-control" placeholder="Infants" min="0">
+        <small class="help-block">Infants (&lt;2 yrs)</small>
+      </div>
+
+    </div>   
+  </div>
+
+  <!-- Promotion Code -->
+  <div class="col-md-4 form-group">
+    <label>Promotion Code</label>
+    <input type="text" placeholder="Optional" class="form-control">
+  </div>
+
+  <div class="col-md-12">
+    <hr>
+    <button class="btn btn-primary" action="submit">Find Flight</button>
+  </div>
+</form>

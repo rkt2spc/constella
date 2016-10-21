@@ -1,0 +1,17 @@
+.row {
+	margin-top: 16px;
+}
+.nav-active { 
+	color: red; 
+	font-weight: bold; 
+}
+.loading-screen {
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+	display: none;
+	background: url('../images/preloader.gif') center no-repeat #fff;
+}
