@@ -27,6 +27,13 @@ module.exports = {
                 path.join('data-models', modelName)
             );
     },
+
+    getValidator: function(validatorName) {
+        return require(
+            this.app_path(
+                path.join('validators', validatorName)
+            ));
+    },
     
     getRouter: function(routeName) { //require the route handler in 'app/routes'
         return require(
