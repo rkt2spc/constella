@@ -45,7 +45,7 @@ appControllers.controller('checkoutCtrl', ['$scope', '$rootScope', '$state', 'bo
 			}
 
 			$state.go('review');
-		}
+		};
 
 		//--------------------------------------------------------
 		//Initialize default data

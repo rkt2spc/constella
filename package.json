@@ -1,11 +1,15 @@
 {
   "name": "constella",
   "version": "1.0.0",
-  "description": "",
+  "description": "Flight Booking Service",
   "main": "index.js",
   "scripts": {
+  	"start": "node index.js",
     "gulp": "gulp",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": "6.7.0"
   },
   "author": "nmtuan",
   "license": "ISC",

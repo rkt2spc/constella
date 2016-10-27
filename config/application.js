@@ -13,7 +13,7 @@ global.App = {
 
     app:    app,
     env:    process.env.NODE_ENV || 'development',
-    port:   process.env['PORT'] || 1337
+    port:   process.env.PORT || 1337
 }
 
 //------------------------------------------------------------------------
@@ -42,8 +42,8 @@ module.exports = {
 
             if (err) return;
 
-            http.createServer(app).listen(1337, function() {
-                console.log('Server listening at port', 1337);
+            http.createServer(app).listen(App.port, function() {
+                console.log('Server listening at port', App.port);
             });
         })
 
