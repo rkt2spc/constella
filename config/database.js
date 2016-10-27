@@ -14,12 +14,12 @@ module.exports = {
 		mongoose.connect(this.connectionString, function(err) {
 
             if (err) {
-            	console.error('cant connect to mongoDB at:', connectionString);
+            	console.error('cant connect to mongoDB at ds031893.mlab.com:31893/flightdb');
             	callback(err);
             	return;
             }
 
-            console.log('mongoDB connected at:', connectionString);
+            console.log('mongoDB connected at ds031893.mlab.com:31893/flightdb');
             callback();
         });
 	}
