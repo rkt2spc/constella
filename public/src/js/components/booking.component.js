@@ -1,4 +1,4 @@
 appComponents.component('booking', {
-	templateUrl: '../partials/booking.html',
+	templateUrl: '../partials/main/booking.html',
 	controller: 'bookingCtrl'
 });

@@ -1,4 +1,4 @@
 appComponents.component('search', {
-	templateUrl: '../partials/booking/search.html',
+	templateUrl: '../partials/main/search.html',
 	controller: 'searchCtrl'
 });
