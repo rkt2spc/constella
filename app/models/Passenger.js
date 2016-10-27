@@ -1,11 +1,17 @@
 var mongoose = require('mongoose');
 
+//------------------------------------------------------------------------
 var passengerSchema = mongoose.Schema({
     
-    title: String,
-    lastName: String,
-    firstName: String
-
+    title: 			{ type: String, required: true },
+    firstName: 		{ type: String, required: true },
+    lastName: 		{ type: String, required: true },
+    dateOfBirth: 	{ type: Date, 	required: true }
 });
 
-module.exports = mongoose.model('Passenger', passengerSchema);
+//------------------------------------------------------------------------
+module.exports = {
+
+	Schema: passengerSchema,
+	Model: mongoose.model('Passenger', passengerSchema)
+}

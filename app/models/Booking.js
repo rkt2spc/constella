@@ -1,42 +1,27 @@
 var mongoose = require('mongoose');
 
+//------------------------------------------------------------------------
+var bookingInfoSchema       = Utils.getModel('Booking/BookingInfo').Schema,
+    passengersInfoSchema    = Utils.getModel('Booking/PassengersInfo').Schema,
+    contactInfoSchema       = Utils.getModel('Booking/ContactInfo').Schema;
+
+//------------------------------------------------------------------------
+var validator = Utils.getValidator('booking');
+
+//------------------------------------------------------------------------
 var bookingSchema = mongoose.Schema({
     
-    bookingInfo: [
-        mongoose.Schema({
-            _flight:   { type: String, trim: true, required: true, ref: 'Flight' },
-            class:     { type: String, required: true}
-        }, { _id: false})
-    ],
-
-	//Passenger
-	passengers: {
-        type: [{
-            _passenger: { type: mongoose.Schema.Types.ObjectId, ref: 'Passenger' }
-        }],
-        validate: {
-          validator: function(arr) {
-            return arr.length >= 1;
-          },
-          message: 'Invalid seats configuration'
-        }
-    },
-
-    //The person who own the booking
-    customer: { 
-    	title: String,
-    	firstName: String,
-    	lastName: String,
-    	email: String,
-    	telephone: String,
-    	address: String,
-    	region: String,
-    	note: String
-    },
-
-    charge: Number,
-    status: Number
+    forwardRoute:   { type: bookingInfoSchema, 	required: true},
+    returnRoute:    { type: bookingInfoSchema },
+	passengers:     { type: passengersInfoSchema,	required: true, validate: validator.validatePassengers },
+    contact:        { type: contactInfoSchema,		required: true,	validate: validator.validateContact },
+    totalPrice:     { type: Number,                 default: 0 }
 
 }, {timestamps: true});
 
-module.exports = mongoose.model('Booking', bookingSchema);
+//------------------------------------------------------------------------
+module.exports = {
+    
+    Schema: bookingSchema,
+    Model: mongoose.model('Booking', bookingSchema)
+}

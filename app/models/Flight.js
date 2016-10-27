@@ -1,29 +1,25 @@
 var mongoose = require('mongoose');
 
+//------------------------------------------------------------------------
+var scheduleSchema  = Utils.getModel('Flight/Schedule').Schema,
+    seatSchema      = Utils.getModel('Flight/Seat').Schema;
+
+//------------------------------------------------------------------------
+var validator = Utils.getValidator('flight');
+
+//------------------------------------------------------------------------
 var flightSchema = mongoose.Schema({
     
-    _id:            { type: String, trim: true},
-    _origin:        { type: String, trim: true, required: true, ref: 'Location' },
-    _destination:   { type: String, trim: true, required: true, ref: 'Location' },
-    departure:      { type: Date,   required: true},
-    arrival:        { type: Date,   required: true},
-    seats: {
-        type: [
-            mongoose.Schema({
-
-    	       _class: { type: String, trim: true, required: true, ref: 'Class' },
-	           price: { type: Number, required: true },
-	           capacity: { type: Number, required: true}
-            }, {_id: false})
-        ],
-        validate: {
-          validator: function(arr) {
-            return arr.length >= 1;
-          },
-          message: 'Invalid seats configuration'
-        },
-
-    }
+    _id:            { type: String,         required: true, trim: true},
+    _origin:        { type: String,         required: true, trim: true, ref: 'Location' },
+    _destination:   { type: String,         required: true, trim: true, ref: 'Location' },
+    schedule:       { type: scheduleSchema, required: true, validate: validator.validateSchedule },
+    seats:          { type: [seatSchema],   required: false, validate: validator.validateSeats }
 });
 
-module.exports = mongoose.model('Flight', flightSchema);
+//------------------------------------------------------------------------
+module.exports = {
+
+    Schema: flightSchema,
+    Model: mongoose.model('Flight', flightSchema)
+}
