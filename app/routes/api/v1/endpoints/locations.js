@@ -1,9 +1,55 @@
-var async = require('async'),
-	Region = Utils.getModel('Region'),
-	Location = Utils.getModel('Location'),
-	Flight = Utils.getModel('Flight'),
+var Location = Utils.getModel('Location').Model,
+	Flight = Utils.getModel('Flight').Model,
 	express = require('express'),
 	locationsRouter = express.Router();
+
+//====================================================================
+locationsRouter.get('/origins', function(req, res, next) {
+
+	//Sanitize query
+
+	var query = req.query.to? {_destination: req.query.to.trim()} : {};
+
+	Flight
+		.find(query)
+		.distinct('_origin')
+		.exec((err, originIds) => {
+
+			if (err) return next(err);
+
+			Location
+				.find({'_id': {$in: originIds}})
+				.exec((err, origins) => {
+
+					if (err) return next(err);
+					res.status(200).json({status: 200, message: 'OK', result: origins});
+				});			
+		});
+});
+
+//====================================================================
+locationsRouter.get('/destinations', function(req, res, next) {
+
+	//Sanitize query
+
+	var query = req.query.from? {_origin: req.query.from.trim()} : {};
+
+	Flight
+		.find(query)
+		.distinct('_destination')
+		.exec((err, destinationIds) => {
+
+			if (err) return next(err);
+
+			Location
+				.find({'_id': {$in: destinationIds}})
+				.exec((err, destinations) => {
+
+					if (err) return next(err);
+					res.status(200).json({status: 200, message: 'OK', result: destinations});
+				});
+		});
+});
 
 //====================================================================
 locationsRouter.get('/:id', function(req, res, next) {
@@ -23,7 +69,7 @@ locationsRouter.get('/:id', function(req, res, next) {
 //====================================================================
 locationsRouter.get('/', function(req, res, next) {
 
-	var query = req.params.region? {_region: req.params.region.trim()} : {};
+	var query = req.query.region? {region: req.query.region.trim()} : {};
 
 	Location
 		.find(query)
@@ -34,28 +80,36 @@ locationsRouter.get('/', function(req, res, next) {
 		});
 });
 
-locationsRouter.post('/', function(req, res, next) {
+//====================================================================
+locationsRouter.put('/:id', function(req, res, next) {
 
-	var regionId = req.body.region.trim();
+	var locationId = req.params.id.trim();
 
-	Region
-		.findById(regionId)
-		.exec((err, region) => {
+	Location
+		.findById(locationId)
+		.exec((err, location) => {
 
 			if (err) return next(err);
-			if (!region) return res.status(400).json({status: 400, message: "Invalid provided region"});
-			
-			var location = new Location({
-				_id: req.body.id,
-				name: req.body.name,
-				_region: regionId
-			});
+			if (location) {
+
+				location.name = req.body.name;
+				location.region = req.body.region;
+
+			} else {
+
+				location = new Location({
+					_id: locationId,
+					name: req.body.name,
+					region: req.body.region
+				});
+			}
 
 			location.save((err) => {
 
 				if (err) return next(err);
-				res.status(200).json({status: 200, message: "Saved", result: "/api/locations/" + location._id});
-			});		
+				res.status(200).json({status: 200, message: 'OK', result: '/api/locations/' + locationId});
+			})
+			
 		});
 });
 
