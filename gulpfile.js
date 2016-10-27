@@ -4,7 +4,7 @@ var gulp = require('gulp'),
 //***************************************************
 // IMAGES
 //***************************************************
-var imgSrc = './public/src/images/**/*.{gif,jpeg,jpg,png,svg}',
+var imgSrc = './public/src/images/**/*.{gif,jpeg,jpg,png,svg,ico}',
     imgDst = './public/build/images';
 
 gulp.task('build-img', function() {
