@@ -8,15 +8,15 @@ exports.validateBookings = {
 exports.validatePassengers = {
 
 	validator: function(passengersInfo) {
-            var adultsCount = passengersInfo.adults.length,
-                childrenCount = passengersInfo.children.length,
-                infantsCount = passengersInfo.infants.length;
+            var adultsCount = passengersInfo.adultsCount,
+                childrenCount = passengersInfo.childrenCount,
+                infantsCount = passengersInfo.infantsCount;
 
             if (adultsCount <= 0 || adultsCount > 6) 
                 return false;
-            if (childrenCount < 0 || childrenCount > (6 - adultsCount)) 
+            if (childrenCount < 0 || childrenCount > (2 * adultsCount) || childrenCount > (6 - adultsCount)) 
                 return false;
-            if (infantsCount > 6 || infantsCount > adultsCount*2)       
+            if (infantsCount < 0 || infantsCount > adultsCount)       
                 return false;
 
             return true;
