@@ -1,8 +1,24 @@
-appControllers.controller('bookingCtrl', ['$scope', '$state',
-	function($scope, $state){
+appControllers.controller('bookingCtrl', ['$scope', '$state', 'testService',
+	function($scope, $state, testService) {
 
-		$state.go('booking.search');
+		//--------------------------------------------------------
+		//State status
+		console.log('State:', 'main.booking');
 
-				
+		//--------------------------------------------------------
+		//Inputs Variables
+		
+		//--------------------------------------------------------
+		//Display Data Variables
+
+		//--------------------------------------------------------
+		//Events triggers
+
+
+		//--------------------------------------------------------
+		//Initialize default data
+
+		//--------------------------------------------------------
+		//State Change Command	
 	}
 ]);
