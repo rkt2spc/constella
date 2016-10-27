@@ -1,10 +1,16 @@
 var mongoose = require('mongoose');
 
+//------------------------------------------------------------------------
 var locationSchema = mongoose.Schema({
     
-    _id: 		{ type: String, trim: true},
-    name: 		{ type: String, required: true },
-    _region: 	{ type: String, trim: true, required: true, ref: 'Region'}
+    _id: 		{ type: String, required: true, trim: true },
+    region: 	{ type: String, required: true, trim: true },
+    name: 		{ type: String, required: true }
 });
 
-module.exports = mongoose.model('Location', locationSchema);
+//------------------------------------------------------------------------
+module.exports = {
+
+	Schema: locationSchema,
+	Model: mongoose.model('Location', locationSchema)
+}
