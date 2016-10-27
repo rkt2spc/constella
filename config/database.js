@@ -5,7 +5,7 @@ mongoose.Promise = global.Promise; //Use native ES6 Promise instead of Mongoose'
 module.exports = {
 	
 	//Options
-	connectionString: process.env.DATABASE_URL || 'mongodb://localhost/flightdb',
+	connectionString: process.env.DATABASE_URL || 'mongodb://nmtuan:WeHaveAll2@ds031893.mlab.com:31893/flightdb',
 
 
 	//Methods
