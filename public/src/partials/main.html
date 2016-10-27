@@ -1,19 +1,21 @@
-<div class="loading-screen"></div>
-
 <!-- ========================================================================== -->
 <div class="page-header">
+  <a ui-sref="home"><img src="images/logo.png"></a>
   <h1>CONSTELLATION AIRLINES BOOKING SERVICE</h1>
 </div>
 
 <ul class="nav nav-tabs" style="margin-bottom: 48px">
   <li role="presentation" ui-sref-active="active">
-    <a ui-sref="booking.search">Search</a>
+    <a ui-sref="main.search">Search</a>
   </li>
   <li role="presentation" ui-sref-active="active">
-    <a ui-sref="booking.flights" style="pointer-events: none;">Flights</a>
+    <a ui-sref="main.booking.flights">Flights</a>
   </li>
-  <li role="presentation">
-    <a>Passengers</a>
+  <li role="presentation" ui-sref-active="active">
+    <a ui-sref="main.booking.passengers">Passengers</a>
+  </li>
+  <li role="presentation" ui-sref-active="active">
+    <a ui-sref="main.booking.checkout">Checkout</a>
   </li>
 </ul>
 
