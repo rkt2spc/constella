@@ -69,7 +69,7 @@ function generateTask(index, origin, destination, departure, arrival) {
 			succes: (response) => console.log('generated:', response.result),
 			error: (xhr, textStatus, errorThrown) => console.log(xhr.responseJSON)
 		});	
-	}
+	};
 }
 
 
@@ -86,7 +86,7 @@ var generateData = function(nDate) {
 					method: 'GET',
 					success: fulfill,
 					error: reject
-				})
+				});
 			});
 
 			promise
@@ -127,7 +127,7 @@ var generateData = function(nDate) {
 			
 			tasks.forEach((task) => {
 				task();
-			})
+			});
 		}]
 	);
-}
+};
