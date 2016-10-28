@@ -1,0 +1,112 @@
+
+<form class="row" ng-submit="updatePassengers()">
+	<h3 class="col-md-12">Passengers Information</h3>
+	<h4 class="col-md-12">Adults</h4>
+	<div class="col-md-4" ng-repeat="p in adults">
+		<h5><b>Passenger #{{$index + 1}}</b></h5>
+		<label>Title</label>
+	  	<select class="form-control" ng-model="p.title" required>
+			<option value="" disabled selected>Select your option</option>
+			<option value="Mr">Mr</option>
+			<option value="Ms">Ms</option>
+			<option value="Mrs">Mrs</option>
+		</select>
+	  	<label>Firstname</label>
+		<input class="form-control" type="text" ng-model="p.firstName" placeholder="firstname" required>
+		<label>Lastname</label>
+		<input class="form-control" type="text" ng-model="p.lastName" placeholder="lastname" required>
+	  	<label>Date of birth</label>
+	  	<input class="form-control" ng-model="p.dateOfBirth" type="date" required>
+	  	<br>
+	</div>
+	<h4 class="col-md-12" ng-show="children.length">Children</h4>
+	<div class="col-md-4" ng-repeat="p in children">
+		<h5><b>Passenger #{{$index + 1}}</b></h5>
+		<label>Title</label>
+	  	<select class="form-control" ng-model="p.title" required>
+			<option value="" disabled selected>Select your option</option>
+			<option value="Mr">Mr</option>
+			<option value="Ms">Ms</option>
+			<option value="Mrs">Mrs</option>
+		</select>
+	  	<label>Firstname</label>
+		<input class="form-control" type="text" ng-model="p.firstName" placeholder="firstname" required>
+		<label>Lastname</label>
+		<input class="form-control" type="text" ng-model="p.lastName" placeholder="lastname" required>
+	  	<label>Date of birth</label>
+	  	<input class="form-control" ng-model="p.dateOfBirth" type="date" required>
+	  	<br>
+	</div>
+	<h4 class="col-md-12" ng-show="infants.length">Infants</h4>
+	<div class="col-md-4" ng-repeat="p in infants">
+		<h5><b>Passenger #{{$index + 1}}</b></h5>
+		<label>Title</label>
+	  	<select class="form-control" ng-model="p.title" required>
+			<option value="" disabled selected>Select your option</option>
+			<option value="Mr">Mr</option>
+			<option value="Ms">Ms</option>
+			<option value="Mrs">Mrs</option>
+		</select>
+	  	<label>Firstname</label>
+		<input class="form-control" type="text" ng-model="p.firstName" placeholder="firstname" required>
+		<label>Lastname</label>
+		<input class="form-control" type="text" ng-model="p.lastName" placeholder="lastname" required>
+	  	<label>Date of birth</label>
+	  	<input class="form-control" ng-model="p.dateOfBirth" type="date" required>
+	  	<br>
+	</div>
+	<div class="col-md-12">
+		<button type="submit" class="center-block btn btn-success">Update Passengers Info</button>
+	</div>
+</form>
+
+<hr>
+
+<form class="row" ng-submit="updateContact()">
+	<h3 class="col-md-12">Contact Info</h3>
+	<div class="col-md-4">
+		<label>Title</label>
+	  	<select class="form-control" ng-model="contact.title" required>
+			<option value="" disabled selected>Select your option</option>
+			<option value="Mr">Mr</option>
+			<option value="Ms">Ms</option>
+			<option value="Mrs">Mrs</option>
+		</select>
+		<label>Firstname</label>
+		<input class="form-control" ng-model="contact.firstName" type="text" placeholder="firstname" required>
+		<label>Lastname</label>
+	  	<input class="form-control" ng-model="contact.lastName" type="text" placeholder="lastname" required>
+	  	<label>Date of birth</label>
+	  	<input class="form-control" ng-model="contact.dateOfBirth" type="date">
+	  	<br>
+	</div>
+	<div class="col-md-4">
+	  	<label>Email</label>
+	  	<input class="form-control" ng-model="contact.email" type="email" placeholder="email" required>
+	  	<label>Tel</label>
+	  	<input class="form-control" ng-model="contact.telephone" type="tel" placeholder="tel" required>
+	  	<label>Address</label>
+	  	<input class="form-control" ng-model="contact.address" type="text" placeholder="address">
+	  	<label>Region</label>
+	  	<input class="form-control" ng-model="contact.region" type="text" placeholder="region">  	
+	  	<br>
+	</div>
+	<div class="col-md-4">
+		<label>Extra note</label>
+	  	<textarea class="form-control" ng-model="contact.note" type="text" placeholder="note" rows="7"></textarea>
+	  	<br>
+	</div>
+	<div class="col-md-12">
+		<button type="submit" class="center-block btn btn-success">Update Contact Info</button>
+	</div>
+	
+</form>
+
+<hr>
+<br>
+<br>
+<button class="btn btn-primary" ng-click="next()">Continue</button>
+<br>
+<br>
+<br>
+<br>

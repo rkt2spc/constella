@@ -1,0 +1,45 @@
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<h3 class="panel-title">Summary</h3>
+	</div>
+	<ul class="list-group">
+	    <li class="list-group-item">
+	    	<h4><b>Forward Route</b></h4>
+	    	<small><b>Seat: </b>{{forwardRoute.class.name}}</small><br>
+	    	<small><b>Flight: </b>{{forwardRoute.flight._id}}</small><br>
+	    	<small><b>Depart: </b>{{forwardRoute.flight.origin.name}} <span ng-show="forwardRoute.flight._origin">({{forwardRoute.flight._origin}})</span></small><br>
+	    	<small>{{forwardRoute.flight.schedule.departure.toLocaleString()}}</small><br>
+	    	<small><b>Arrive: </b>{{forwardRoute.flight.destination.name}} <span ng-show="forwardRoute.flight._destination">({{forwardRoute.flight._destination}})</span></small><br>
+	    	<small>{{forwardRoute.flight.schedule.arrival.toLocaleString()}}</small><br>
+
+	    </li>
+	    <li class="list-group-item" ng-show="roundTrip">
+	    	<h4><b>Return Route</b></h4>
+	    	<small><b>Seat: </b>{{returnRoute.class.name}}</small><br>
+	    	<small><b>Flight: </b>{{returnRoute.flight._id}}</small><br>
+	    	<small><b>Depart: </b>{{returnRoute.flight.origin.name}} <span ng-show="returnRoute.flight._origin">({{returnRoute.flight._origin}})</span></small><br>
+	    	<small>{{returnRoute.flight.schedule.departure.toLocaleString()}}</small><br>
+	    	<small><b>Arrive: </b>{{returnRoute.flight.destination.name}} <span ng-show="returnRoute.flight._destination">({{returnRoute.flight._destination}})</small><br>
+	    	<small>{{returnRoute.flight.schedule.arrival.toLocaleString()}}</small><br>
+	    </li>
+	    <li class="list-group-item">
+	    	<h4><b>Passengers</b></h4>
+	    	<small><b>Adults ({{passengers.adultsCount}})</b></small><br>
+	    	<small ng-repeat="passenger in passengers.adults">{{passenger.lastName}} {{passenger.firstName}}<br></small>
+	    	<small><b>Children ({{passengers.childrenCount}})</b></small><br>
+	    	<small ng-repeat="passenger in passengers.children">{{passenger.lastName}} {{passenger.firstName}}<br></small>
+	    	<small><b>Infants ({{passengers.infantsCount}})</b></small><br>
+	    	<small ng-repeat="passenger in passengers.infants">{{passenger.lastName}} {{passenger.firstName}}<br></small>
+	    </li>
+	    <li class="list-group-item">
+	    	<h4><b>Contact Info</b></h4>
+	    	<small><b>Name: </b>{{contact.firstName}} {{contact.lastName}}</small><br>
+	    	<small><b>Email: </b>{{contact.email}}</small><br>
+	    	<small><b>Tel: </b>{{contact.telephone}}</small><br>
+	    </li>
+	    <li class="list-group-item">
+	    	<h4><b>Total Price</b></h4>
+	    	<p>{{formatCurrency(config.totalPrice)}}</p>
+	    </li>
+	  </ul>
+</div>

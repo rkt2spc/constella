@@ -1,0 +1,89 @@
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h2 class="panel-title">Forward Route</h2>
+  </div>
+  <div class="panel-body">
+    <p ng-bind-html="forwardRouteDescription"></p>
+  </div>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Flight</th>
+        <th>Departure</th>
+        <th>Arrival</th>
+        <th>Ticket Options</th>
+        <th>Total Price</th>
+        <th>Confirm</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="vert-align" ng-repeat='flight in forwardFlights'>
+        <td>{{flight._id}}</td>
+        <td>{{flight.schedule.departure.toLocaleTimeString()}}</td>
+        <td>{{flight.schedule.arrival.toLocaleTimeString()}}</td>
+        <td ng-init="selectionA = null; priceA = 0">
+          <select class="form-control" ng-model="selectionA" ng-change="priceA = calculatePrice(selectionA)">
+            <option value="" disabled selected>Select your option</option>
+            <option ng-repeat="opt in flight.seats" value="{{opt}}">{{opt.class.name}}</option>
+          </select>
+        </td>
+        <td>{{priceA}}</td>
+        <td>
+          <button type="button" ng-disabled="!selectionA" ng-show="flight.valid" ng-click="setForwardRoute(flight, selectionA)" class="btn btn-success btn-xs">
+            Set booking
+          </button>
+          <button type="button" ng-show="!flight.valid" class="btn btn-danger btn-xs disabled">
+            Invalid
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div ng-show="roundTrip" class="panel panel-primary">
+  <div class="panel-heading">
+    <h2 class="panel-title">Return Route</h2>
+  </div>
+  <div class="panel-body">
+    <p ng-bind-html="returnRouteDescription"></p>
+  </div>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Flight</th>
+        <th>Departure</th>
+        <th>Arrival</th>
+        <th>Ticket Options</th>
+        <th>Price</th>
+        <th>Confirm</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="vert-align" ng-repeat='flight in returnFlights'>
+        <td>{{flight._id}}</td>
+        <td>{{flight.schedule.departure.toLocaleTimeString()}}</td>
+        <td>{{flight.schedule.arrival.toLocaleTimeString()}}</td>
+        <td ng-init="selectionB = null; priceB = 0">
+          <select class="form-control" ng-model="selectionB" ng-change="priceB = calculatePrice(selectionB)">
+            <option value="" disabled selected>Select your option</option>
+            <option ng-repeat="opt in flight.seats" value="{{opt}}">{{opt.class.name}}</option>
+          </select>
+        </td>
+        <td>{{priceB}}</td>
+        <td>
+          <button type="button" ng-disabled="!selectionB" ng-show="flight.valid" ng-click="setReturnRoute(flight, selectionB)" class="btn btn-success btn-xs">
+            Set booking
+          </button>
+          <button type="button" ng-show="!flight.valid" class="btn btn-danger btn-xs disabled">
+            Invalid
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<button class="btn btn-primary" ng-click="continue()">Continue</button>
+<br>
+<br>
+<br>
+<br>
