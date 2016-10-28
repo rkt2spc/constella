@@ -1,0 +1,71 @@
+<div class="page-header">
+  <a ui-sref="home"><img src="images/logo.png"></a>
+  <h1>REVIEW REGISTERED BOOKING</h1>
+</div>
+
+<div class="row">
+	<div class="col-md-5">
+		<label for="exampleInputEmail1">Booking ID</label>
+
+		<div class="input-group">
+	  		<input type="text" class="form-control" ng-model="bookingId" placeholder="Search for...">
+	  		<span class="input-group-btn">
+	  		  <button class="btn btn-default" ng-click="searchBooking()" type="button"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+	  		</span>
+	  	</div>
+	  	<small>{{message}}</small>
+
+	  	<div ng-show="hasBooking">
+	  		<h1>Your booking</h1>
+	  		<ul class="list-group">
+	  			<li class="list-group-item">
+	    			<h4><b>Info</b></h4>
+	    			<small><b>ID: </b>{{bookingId}}</small><br>
+	    			<small><b>Created at: </b>{{booking.createdAt.toLocaleString()}}</small><br>
+	    			<small><b>Last update: </b>{{booking.updatedAt.toLocaleString()}}</small><br>
+	    		</li>
+	    		<li class="list-group-item">
+	    			<h4><b>Forward Route</b></h4>
+	    			<small><b>Seat: </b>{{forwardRoute.class.name}}</small><br>
+	    			<small><b>Flight: </b>{{forwardRoute.flight._id}}</small><br>
+	    			<small><b>Depart: </b>{{forwardRoute.flight.origin.name}} ({{forwardRoute.flight.origin._id}})</small><br>
+	    			<small>{{forwardRoute.flight.schedule.departure.toLocaleString()}}</small><br>
+	    			<small><b>Arrive: </b>{{forwardRoute.flight.destination.name}} ({{forwardRoute.flight.destination._id}})</small><br>
+	    			<small>{{forwardRoute.flight.schedule.arrival.toLocaleString()}}</small><br>
+	    		</li>
+	    		<li class="list-group-item" ng-show="returnRoute">
+	    			<h4><b>Return Route</b></h4>
+	    			<small><b>Seat: </b>{{returnRoute.class.name}}</small><br>
+	    			<small><b>Flight: </b>{{returnRoute.flight._id}}</small><br>
+	    			<small><b>Depart: </b>{{returnRoute.flight.origin.name}} ({{returnRoute.flight.origin._id}})</small><br>
+	    			<small>{{returnRoute.flight.schedule.departure.toLocaleString()}}</small><br>
+	    			<small><b>Arrive: </b>{{returnRoute.flight.destination.name}} ({{returnRoute.flight.destination._id}})</small><br>
+	    			<small>{{returnRoute.flight.schedule.arrival.toLocaleString()}}</small><br>
+	    		</li>
+	    		<li class="list-group-item">
+	    			<h4><b>Passengers</b></h4>
+	    			<small><b>Adults ({{passengers.adults.length}})</b></small><br>
+	    			<small ng-repeat="passenger in passengers.adults">{{passenger.title}} {{passenger.lastName}} {{passenger.firstName}}<br></small>
+	    			<small><b>Children ({{passengers.children.length}})</b></small><br>
+	    			<small ng-repeat="passenger in passengers.children">{{passenger.lastName}} {{passenger.firstName}}<br></small>
+	    			<small><b>Infants ({{passengers.infants.length}})</b></small><br>
+	    			<small ng-repeat="passenger in passengers.infants">{{passenger.lastName}} {{passenger.firstName}}<br></small>
+	    		</li>
+	    		<li class="list-group-item">
+	    			<h4><b>Contact Info</b></h4>
+	    			<small><b>Name: </b>{{contact.title}} {{contact.firstName}} {{contact.lastName}}</small><br>
+	    			<small><b>Email: </b>{{contact.email}}</small><br>
+	    			<small><b>Tel: </b>{{contact.telephone}}</small><br>
+	    			<small><b>Address: </b>{{contact.address}}</small><br>
+	    			<small><b>Region: </b>{{contact.region}}</small><br>
+	    			<small><b>Note: </b>{{contact.note}}</small><br>
+	    		</li>
+	    		<li class="list-group-item">
+	    			<h4><b>Total Price</b></h4>
+	    			<p>{{formatCurrency(booking.totalPrice)}}</p>
+	    		</li>
+	  		</ul>
+	  	</div>
+	</div>
+</div>
+
