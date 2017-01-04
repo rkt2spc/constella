@@ -5,6 +5,7 @@ var express = require('express'),
 	morgan = require('morgan'),
     bodyParser = require('body-parser');
 
+var constant = require("../app/models/Const/siteconst");
 var app = express();
 
 //------------------------------------------------------------------------

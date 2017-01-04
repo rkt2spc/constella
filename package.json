@@ -4,7 +4,7 @@
   "description": "Flight Booking Service",
   "main": "index.js",
   "scripts": {
-  	"start": "node index.js",
+    "start": "node index.js",
     "gulp": "gulp",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,8 +17,10 @@
     "async": "^2.1.2",
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
-    "mongoose": "^4.6.3",
+    "express-jwt": "^5.1.0",
+    "mongoose": "^4.7.6",
     "morgan": "^1.7.0",
+    "passport": "^0.3.2",
     "socket.io": "^1.5.0",
     "validator": "^6.1.0"
   },
