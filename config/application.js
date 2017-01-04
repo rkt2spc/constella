@@ -3,10 +3,17 @@ var path = require('path'),
 //------------------------------------------------------------------------
 var express = require('express'),
 	morgan = require('morgan'),
-    bodyParser = require('body-parser');
+    bodyParser = require('body-parser'),
+    passport = require('passport'),
+    jwt = require('express-jwt');
 
-var constant = require("../app/models/Const/siteconst");
+const constant = require("../app/models/Const/siteconst");
 var app = express();
+let auth = jwt({
+    secret: constant.SECRET,
+    userProperty: 'payload'
+});
+// }).unless({path:[]});
 
 //------------------------------------------------------------------------
 global.Utils = require('./utilities');
@@ -21,7 +28,7 @@ global.App = {
 var config = {
 
         database:           Utils.getConfig('database'),
-        // authentication:     Utils.getConfig('authentication')(),
+        passport:           Utils.getConfig('passport'),
         routing:            Utils.getConfig('routing'),
         errorHandling: 		Utils.getConfig('errorHandling')
     };
@@ -31,7 +38,9 @@ app.use(morgan('dev'));
 app.use(express.static(path.join(Utils.root_path, 'public', 'build')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(config.routing.appRouter);
+app.use(passport.initialize());
+//app.use(auth);
+app.use(config.routing.appRouter, auth);
 app.use(config.errorHandling.handler);
 
 
@@ -49,4 +58,4 @@ module.exports = {
         })
 
 	}
-}
+};

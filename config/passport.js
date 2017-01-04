@@ -6,11 +6,11 @@
 const passport = require('passport'),
     crypto = require('crypto'),
     LocalStrategy = require('passport-local').Strategy,
-    constant = require('../const/siteconst');
+    constant = require('../app/models/Const/siteconst');
 
 const User = Utils.getModel('User').Model;
 
-passport.use(new LocalStrategy({
+module.exports = passport.use(new LocalStrategy({
         usernameField: 'email'
     },
     function (email, password, done) {
@@ -23,10 +23,9 @@ passport.use(new LocalStrategy({
                     });
                 }
                 // Return if password is wrong
-                let salt = crypto.randomBytes(16).toString('hex');
                 let hash = crypto.pbkdf2Sync(password, user.salt, 100000, 20, 'sha512').toString('hex');
 
-                if (hass !== user.hash) {
+                if (hash !== user.hash) {
                     return done(null, false, {
                         msg: constant.PASSWORD_WRONG
                     });
