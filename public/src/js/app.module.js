@@ -101,8 +101,16 @@ app.config(['$stateProvider', '$urlRouterProvider',
     }
 ]);
 
-app.run(['$rootScope', '$transitions',
-    function ($rootScope, $transitions) {
+app.run(['$rootScope', '$transitions', '$location', 'authenticationService',
+    function ($rootScope, $transitions, $location, authenticationService) {
+
+        $rootScope.$on('$routeChangeStart', function(event, nextRoute, currentRoute) {
+            if ($location.path() !== '/register' && $location.path() !== '/login') {
+                if(!authenticationService.isLoggedIn()){
+                    $location.path('/register');
+                }
+            }
+        });
 
         $transitions.onStart({}, () => {
             console.log('loading data...');
@@ -114,4 +122,3 @@ app.run(['$rootScope', '$transitions',
             $("html, body").animate({scrollTop: 0}, 200);
         });
     }]);
-
