@@ -2,8 +2,7 @@
  * Created by Stupig on 1/4/2017.
  */
 
-const ObjectId = require('mongoose').Types.ObjectId,
-    crypto = require('crypto'),
+const crypto = require('crypto'),
     User = Utils.getModel('User').Model,
     express = require('express'),
     passport = require('passport'),
@@ -12,46 +11,25 @@ const ObjectId = require('mongoose').Types.ObjectId,
     util = require('../../../../../config/utilities');
 authenticationRouter = express.Router();
 
-let generateJwt = user => {
-    let expiry = new Date();
-    expiry.setDate(expiry.getDate() + 7); // Expire token is 7 days
-
-    return jwt.sign({
-        user_id: user.user_id,
-        email: user.email,
-        username: user.username,
-        exp: parseInt(expiry.getTime() / 1000),
-    }, constant.SECRET);
-};
-
 //====================================================================
 authenticationRouter.post('/register', (req, res, next) => {
-    let salt = crypto.randomBytes(16).toString('hex');
-    let hash = crypto.pbkdf2Sync(req.body.password, salt, 100000, 20, 'sha512').toString('hex');
-    let user = new User({
-        username: req.body.username,
-        email: req.body.email,
-        salt: salt,
-        hash: hash
-    });
+    let user = new User();
+    user.username = req.body.username;
+    user.email = req.body.email;
+    user.setPassword(req.body.password);
 
-    User.create(user, (err, user) => {
-        if (!err) {
-            if (user) {
-                return res.status(200).json({
-                    [constant.API_STATUS]: constant.API_SUCCESS_YES,
-                    [constant.API_MSG]: constant.SUCCESS,
-                    [constant.API_DATA]: user
-                });
-            }
-            return res.status(300).json({
-                [constant.API_STATUS]: constant.API_SUCCESS_NO,
-                [constant.API_MSG]: constant.GENERAL_ERROR,
+    user.save(err => {
+        if(!err){
+            let token = user.generateJwt();
+            res.status(200).json({
+                [constant.API_TOKEN]: token,
+                [constant.API_STATUS]: constant.API_SUCCESS_YES,
+                [constant.API_DATA]: user
             });
         }
         return res.status(300).json({
             [constant.API_STATUS]: constant.API_SUCCESS_NO,
-            [constant.API_MSG]: constant.GENERAL_ERROR + " " + err.message
+            [constant.API_MSG]: constant.GENERAL_ERROR,
         });
     });
 });
@@ -71,7 +49,7 @@ authenticationRouter.post('/login', function (req, res, next) {
         } else {
             // If a user is found
             if (user) {
-                token = generateJwt(user);
+                token = user.generateJwt();
                 res.status(200).json({
                     [constant.API_TOKEN]: token,
                     [constant.API_STATUS]: constant.API_SUCCESS_YES,

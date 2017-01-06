@@ -23,9 +23,7 @@ module.exports = passport.use(new LocalStrategy({
                     });
                 }
                 // Return if password is wrong
-                let hash = crypto.pbkdf2Sync(password, user.salt, 100000, 20, 'sha512').toString('hex');
-
-                if (hash !== user.hash) {
+                if (!user.validPassword(password)) {
                     return done(null, false, {
                         msg: constant.PASSWORD_WRONG
                     });

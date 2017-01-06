@@ -4,29 +4,22 @@ var path = require('path'),
 var express = require('express'),
 	morgan = require('morgan'),
     bodyParser = require('body-parser'),
-    passport = require('passport'),
-    jwt = require('express-jwt');
+    passport = require('passport');
 
 const constant = require("../app/models/Const/siteconst");
 var app = express();
-let auth = jwt({
-    secret: constant.SECRET,
-    userProperty: 'payload'
-});
-// }).unless({path:[]});
 
 //------------------------------------------------------------------------
 global.Utils = require('./utilities');
 global.App = {
-
     app:    app,
     env:    process.env.NODE_ENV || 'development',
-    port:   process.env.PORT || 1337
-}
+    port:   process.env.PORT || 1337,
+    secret: process.env.SERECT || constant.SECRET
+};
 
 //------------------------------------------------------------------------
 var config = {
-
         database:           Utils.getConfig('database'),
         passport:           Utils.getConfig('passport'),
         routing:            Utils.getConfig('routing'),
@@ -39,8 +32,7 @@ app.use(express.static(path.join(Utils.root_path, 'public', 'build')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(passport.initialize());
-//app.use(auth);
-app.use(config.routing.appRouter, auth);
+app.use(config.routing.appRouter);
 app.use(config.errorHandling.handler);
 
 
