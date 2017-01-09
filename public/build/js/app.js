@@ -1,109 +1,127 @@
 var app = angular.module('app', ['ui.router', 'ngAnimate', 'ngSanitize', 'appComponents', 'appControllers', 'appServices']);
 
 app.config(['$stateProvider', '$urlRouterProvider',
-  function($stateProvider, $urlRouterProvider) {
+    function ($stateProvider, $urlRouterProvider) {
 
-    $urlRouterProvider.otherwise('/');
-    $urlRouterProvider.when('/main', '/main/search');
-    $urlRouterProvider.when('/main/booking', '/main/booking/flights');
+        $urlRouterProvider.otherwise('/');
+        $urlRouterProvider.when('/main', '/main/search');
+        $urlRouterProvider.when('/main/booking', '/main/booking/flights');
 
-    // An array of state definitions
-    var states = [
-      {
-        name: 'home',
-        url: '/',
-        component: 'home',
-        resolve: {
-          'longLoading': (testService) => testService.loadingPromise(300), //Test loading
-        }
-      },
+        // An array of state definitions
+        var states = [
+            {
+                name: 'home',
+                url: '/',
+                component: 'home',
+                resolve: {
+                    'longLoading': (testService) => testService.loadingPromise(300), //Test loading
+                }
+            },
 
-      {
-        name: 'review',
-        url: '/review',
-        component: 'review'
-      },
-      
-      {
-        name: 'main',
-        component: 'main',
-        url: '/main',
-        resolve: {
-          'originsData': (locationsService) => locationsService.getOriginsPromise(),
-          'destinationsData': (locationsService) => locationsService.getDestinationsPromise()
-        }
-      },
+            {
+                name: 'login',
+                url: '/login',
+                component: 'login'
+            },
 
-      {
-        name: 'main.search',
-        url: '/search',
-        component: 'search',
-        resolve: {
-          'longLoading': (testService) => testService.loadingPromise(300), //Test loading       
-        }
-      },
+            {
+                name: 'register',
+                url: '/register',
+                component: 'register'
+            },
 
-      {
-        name: 'main.booking',
-        component: 'booking',
-        url: '/booking',
-        resolve: {
-          'forwardRouteData': (flightsService) => flightsService.getForwardRoutePromise(),
-          'returnRouteData': (flightsService) => flightsService.getReturnRoutePromise(),
-          'travelClassesData': (travelClassesService) => travelClassesService.getTravelClassesPromise()
-        }
-      },
+            {
+                name: 'review',
+                url: '/review',
+                component: 'review'
+            },
 
-      {
-        name: 'main.booking.flights',
-        url: '/flights',
-        component: 'flights',
-        resolve: {
-          'longLoading': (testService) => testService.loadingPromise(300), //Test loading
-        }
-      },
+            {
+                name: 'main',
+                component: 'main',
+                url: '/main',
+                resolve: {
+                    'originsData': (locationsService) => locationsService.getOriginsPromise(),
+                    'destinationsData': (locationsService) => locationsService.getDestinationsPromise()
+                }
+            },
 
-      {
-        name: 'main.booking.passengers',
-        url: '/passengers',
-        component: 'passengers',
-        resolve: {
-          'longLoading': (testService) => testService.loadingPromise(300), //Test loading
-        }
-      },
+            {
+                name: 'main.search',
+                url: '/search',
+                component: 'search',
+                resolve: {
+                    'longLoading': (testService) => testService.loadingPromise(300), //Test loading
+                }
+            },
 
-      {
-        name: 'main.booking.checkout',
-        url: '/checkout',
-        component: 'checkout',
-        resolve: {
-          'longLoading': (testService) => testService.loadingPromise(300), //Test loading
-        }
-      }
+            {
+                name: 'main.booking',
+                component: 'booking',
+                url: '/booking',
+                resolve: {
+                    'forwardRouteData': (flightsService) => flightsService.getForwardRoutePromise(),
+                    'returnRouteData': (flightsService) => flightsService.getReturnRoutePromise(),
+                    'travelClassesData': (travelClassesService) => travelClassesService.getTravelClassesPromise()
+                }
+            },
 
-    ];
+            {
+                name: 'main.booking.flights',
+                url: '/flights',
+                component: 'flights',
+                resolve: {
+                    'longLoading': (testService) => testService.loadingPromise(300), //Test loading
+                }
+            },
 
-    states.forEach((state) => {
-      $stateProvider.state(state);
-    });
-  }
+            {
+                name: 'main.booking.passengers',
+                url: '/passengers',
+                component: 'passengers',
+                resolve: {
+                    'longLoading': (testService) => testService.loadingPromise(300), //Test loading
+                }
+            },
+
+            {
+                name: 'main.booking.checkout',
+                url: '/checkout',
+                component: 'checkout',
+                resolve: {
+                    'longLoading': (testService) => testService.loadingPromise(300), //Test loading
+                }
+            }
+
+        ];
+
+        states.forEach((state) => {
+            $stateProvider.state(state);
+        });
+    }
 ]);
 
-app.run(['$rootScope', '$transitions',
-  function($rootScope, $transitions){
+app.run(['$rootScope', '$transitions', '$location', 'authenticationService',
+    function ($rootScope, $transitions, $location, authenticationService) {
 
-    $transitions.onStart({}, () => {
-      console.log('loading data...');
-      $rootScope.loading = true;
-    });
-    $transitions.onSuccess({}, () => {
-      console.log('loading success');
-      $rootScope.loading = false;
-      $("html, body").animate({ scrollTop: 0 }, 200);
-    });   
-}]);
+        $rootScope.$on('$routeChangeStart', function(event, nextRoute, currentRoute) {
+            if ($location.path() !== '/register' && $location.path() !== '/login') {
+                if(!authenticationService.isLoggedIn()){
+                    $location.path('/login');
+                }
+            }
+        });
 
-
+        $transitions.onStart({}, () => {
+            console.log('loading data...');
+            $rootScope.loading = true;
+        });
+        $transitions.onSuccess({}, () => {
+            console.log('loading success');
+            $rootScope.loading = false;
+            $("html, body").animate({scrollTop: 0}, 200);
+        });
+    }]);
 var appComponents = angular.module("appComponents",['appControllers']);
 var appControllers = angular.module("appControllers",[]);
 function getRandomInt(min, max) {
@@ -304,6 +322,13 @@ appComponents.component('flights', {
 appComponents.component('home', {
 	templateUrl: '../partials/home.html'
 });
+/**
+ * Created by Stupig on 1/6/2017.
+ */
+appComponents.component('login', {
+    templateUrl: '../partials/login.html',
+    controller: 'loginCtrl'
+});
 appComponents.component('main', {
 	templateUrl: '../partials/main.html',
 	controller: 'mainCtrl'
@@ -311,6 +336,13 @@ appComponents.component('main', {
 appComponents.component('passengers', {
 	templateUrl: '../partials/main/booking/passengers.html',
 	controller: 'passengersCtrl'
+});
+/**
+ * Created by Stupig on 1/6/2017.
+ */
+appComponents.component('register', {
+    templateUrl: '../partials/register.html',
+    controller: 'registerCtrl'
 });
 appComponents.component('review', {
 	templateUrl: '../partials/review.html',
@@ -598,6 +630,30 @@ appControllers.controller('flightsCtrl', ['$scope', '$state', 'flightsService', 
 		};			
 	}
 ]);
+/**
+ * Created by Stupig on 1/6/2017.
+ */
+appControllers.controller('loginCtrl', ['$location', 'authenticationService',
+    function ($location, authenticationService){
+        var vm = this;
+
+        vm.credentials = {
+            email: "",
+            password: ""
+        };
+
+        vm.onSubmit = function(){
+            authenticationService
+                .login(vm.credentials)
+                .error(function(err){
+                    alert(err);
+                })
+                .then(function() {
+                    $location.path('/');
+                });
+        }
+    }
+]);
 appControllers.controller('mainCtrl', ['$scope', '$state',
 	function($scope, $state) {
 
@@ -682,6 +738,31 @@ appControllers.controller('passengersCtrl', ['$scope', '$state', 'bookingService
 			$state.go('main.booking.checkout');
 		};			
 	}
+]);
+/**
+ * Created by Stupig on 1/6/2017.
+ */
+appControllers.controller('registerCtrl', ['$location', 'authenticationService',
+    function ($location, authenticationService) {
+        var vm = this;
+
+        vm.credentials = {
+            username: "",
+            email: "",
+            password: ""
+        };
+
+        vm.onSubmit = function () {
+            authenticationService
+                .register(vm.credentials)
+                .error(function(err){
+                    alert(err);
+                })
+                .then(function(){
+                    $location.path('/');
+                });
+        }
+    }
 ]);
 appControllers.controller('reviewCtrl', ['$scope', '$rootScope', '$state', 'bookingService', 'locationsService', 'travelClassesService',
 	function($scope, $rootScope, $state, bookingService, locationsService, travelClassesService) {
@@ -1036,6 +1117,70 @@ appControllers.controller('summaryCtrl', ['$scope', '$state', 'bookingService', 
 		//--------------------------------------------------------
 		//State Change Command	
 	}
+]);
+/**
+ * Created by Stupig on 1/6/2017.
+ */
+appServices.factory('authenticationService', ['validateService', '$http', '$window',
+    function (validateService, $http, $window) {
+        var service = {
+            saveToken: function (token){
+                $window.localStorage['currentUserToken'] = token;
+            },
+
+            getToken: function(token){
+                return $window.localStorage['currentUserToken'];
+            },
+
+            isLoggedIn: function(){
+                var token = this.getToken();
+                var payload;
+
+                if (token) {
+                    payload = token.split('.')[1];
+                    payload = $window.atob(payload);
+                    payload = JSON.parse(payload);
+
+                    return payload.exp > Date.now() / 1000;
+                }
+                return false;
+
+            },
+
+            logout: function(){
+                $window.localStorage.removeItem('currentUserToken');
+            },
+
+            currentUser: function(){
+                if (this.isLoggedIn()) {
+                    var token = this.getToken();
+                    var payload = token.split('.')[1];
+                    payload = $window.atob(payload);
+                    payload = JSON.parse(payload);
+                    return {
+                        email: payload.email,
+                        username: payload.username
+                    };
+                }
+            },
+
+            register: function(user) {
+                return $http.post('/api/authentication/register', user)
+                    .success(function (data) {
+                        this.saveToken(data.token);
+                    });
+            },
+
+            login: function (user) {
+                return $http.post('/api/login', user)
+                    .success(function (data) {
+                        this.saveToken(data.token);
+                    });
+            }
+        };
+
+        return service;
+    }
 ]);
 appServices.factory('bookingService', ['validateService',
 	function(validateService) {

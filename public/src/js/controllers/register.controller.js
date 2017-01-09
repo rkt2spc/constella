@@ -2,8 +2,8 @@
  * Created by Stupig on 1/6/2017.
  */
 appControllers.controller('registerCtrl', ['$location', 'authenticationService',
-    ($location, authenticationService) => {
-        let vm = this;
+    function ($location, authenticationService) {
+        var vm = this;
 
         vm.credentials = {
             username: "",
@@ -11,13 +11,13 @@ appControllers.controller('registerCtrl', ['$location', 'authenticationService',
             password: ""
         };
 
-        vm.onSubmit = ()=> {
+        vm.onSubmit = function () {
             authenticationService
                 .register(vm.credentials)
-                .error(err => {
+                .error(function(err){
                     alert(err);
                 })
-                .then(()=> {
+                .then(function(){
                     $location.path('/');
                 });
         }

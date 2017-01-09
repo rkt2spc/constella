@@ -107,7 +107,7 @@ app.run(['$rootScope', '$transitions', '$location', 'authenticationService',
         $rootScope.$on('$routeChangeStart', function(event, nextRoute, currentRoute) {
             if ($location.path() !== '/register' && $location.path() !== '/login') {
                 if(!authenticationService.isLoggedIn()){
-                    $location.path('/register');
+                    $location.path('/login');
                 }
             }
         });

@@ -2,21 +2,21 @@
  * Created by Stupig on 1/6/2017.
  */
 appControllers.controller('loginCtrl', ['$location', 'authenticationService',
-    ($location, authenticationService) => {
-        let vm = this;
+    function ($location, authenticationService){
+        var vm = this;
 
         vm.credentials = {
             email: "",
             password: ""
         };
 
-        vm.onSubmit = ()=> {
+        vm.onSubmit = function(){
             authenticationService
                 .login(vm.credentials)
-                .error(err => {
+                .error(function(err){
                     alert(err);
                 })
-                .then(()=> {
+                .then(function() {
                     $location.path('/');
                 });
         }
