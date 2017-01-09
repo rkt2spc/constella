@@ -40,7 +40,13 @@ module.exports = {
             this.app_path(
                 path.join('routes', routeName)
             ));
+    },
+
+    getAPIResponse:  function(isSuccess, msg, data) {
+        return {
+            'status': isSuccess,
+            'msg': msg,
+            'data': data
+        };
     }
-}
-
-
+};
