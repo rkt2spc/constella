@@ -23,7 +23,10 @@ let UserSchema = new Schema({
         type: String,
         require: true
     },
-    last_login: Date
+    facebook: {
+        id: String,
+        token: String
+    }
 });
 
 UserSchema.methods.setPassword = function (password) {
