@@ -44,18 +44,44 @@ appServices.factory('authenticationService', ['validateService', '$http', '$wind
                 }
             },
 
-            register: function(user) {
-                return $http.post('/api/authentication/register', user)
-                    .success(function (data) {
-                        this.saveToken(data.token);
+            register: function(user, callback) {
+                var promise = new Promise((fulfill, reject) => {
+                    $.ajax({
+                        url: '/api/authentication/register',
+                        method: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(user),
+                        success: fulfill,
+                        error: reject
                     });
+                });
+
+                promise
+                    .then((response) => {
+                        this.saveToken(response.token);
+                        callback(null, response.data);
+                    })
+                    .catch((xhr, textStatus, errorThrown) => callback(xhr));
             },
 
-            login: function (user) {
-                return $http.post('/api/login', user)
-                    .success(function (data) {
-                        this.saveToken(data.token);
+            login: function (user, callback) {
+                var promise = new Promise((fulfill, reject) => {
+                    $.ajax({
+                        url: '/api/authentication/login',
+                        method: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(user),
+                        success: fulfill,
+                        error: reject
                     });
+                });
+
+                promise
+                    .then((response) => {
+                        this.saveToken(response.token);
+                        callback(null, response.data);
+                    })
+                    .catch((xhr, textStatus, errorThrown) => callback(xhr));
             }
         };
 

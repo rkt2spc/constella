@@ -103,16 +103,13 @@ app.config(['$stateProvider', '$urlRouterProvider',
 
 app.run(['$rootScope', '$transitions', '$location', 'authenticationService',
     function ($rootScope, $transitions, $location, authenticationService) {
-
-        $rootScope.$on('$routeChangeStart', function(event, nextRoute, currentRoute) {
+        $transitions.onStart({}, () => {
             if ($location.path() !== '/register' && $location.path() !== '/login') {
                 if(!authenticationService.isLoggedIn()){
                     $location.path('/login');
                 }
             }
-        });
 
-        $transitions.onStart({}, () => {
             console.log('loading data...');
             $rootScope.loading = true;
         });

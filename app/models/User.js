@@ -2,7 +2,8 @@
  * Created by phong.tran.nam on 04/01/2017.
  */
 const mongoose = require('mongoose'),
-    jwt = require('jsonwebtoken');
+    jwt = require('jsonwebtoken'),
+    crypto = require('crypto');
 const Schema = mongoose.Schema;
 
 let UserSchema = new Schema({

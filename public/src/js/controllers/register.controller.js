@@ -1,25 +1,26 @@
 /**
  * Created by Stupig on 1/6/2017.
  */
-appControllers.controller('registerCtrl', ['$location', 'authenticationService',
-    function ($location, authenticationService) {
-        var vm = this;
-
-        vm.credentials = {
+appControllers.controller('registerCtrl', ['$scope','$rootScope', '$state', 'authenticationService',
+    function ($scope, $rootScope, $state, authenticationService) {
+        $scope.input = {
             username: "",
             email: "",
             password: ""
         };
 
-        vm.onSubmit = function () {
-            authenticationService
-                .register(vm.credentials)
-                .error(function(err){
-                    alert(err);
-                })
-                .then(function(){
-                    $location.path('/');
-                });
+        $scope.onSubmit = function () {
+            authenticationService.register($scope.input, function(err, result){
+                if (err) {
+                    console.log(err);
+                    $scope.message = "You have invalid register, please fill in all required information";
+                    $rootScope.loading = false;
+                }
+                else{
+                    $rootScope.loading = false;
+                    $state.go('home');
+                }
+            });
         }
     }
 ]);

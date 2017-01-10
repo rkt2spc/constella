@@ -1,4 +1,5 @@
 const constant = require('../app/models/Const/siteconst');
+util = require('./utilities');
 
 //------------------------------------------------------------------------
 let configObject = {

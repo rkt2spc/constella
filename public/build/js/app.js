@@ -103,16 +103,13 @@ app.config(['$stateProvider', '$urlRouterProvider',
 
 app.run(['$rootScope', '$transitions', '$location', 'authenticationService',
     function ($rootScope, $transitions, $location, authenticationService) {
-
-        $rootScope.$on('$routeChangeStart', function(event, nextRoute, currentRoute) {
+        $transitions.onStart({}, () => {
             if ($location.path() !== '/register' && $location.path() !== '/login') {
                 if(!authenticationService.isLoggedIn()){
                     $location.path('/login');
                 }
             }
-        });
 
-        $transitions.onStart({}, () => {
             console.log('loading data...');
             $rootScope.loading = true;
         });
@@ -633,24 +630,26 @@ appControllers.controller('flightsCtrl', ['$scope', '$state', 'flightsService', 
 /**
  * Created by Stupig on 1/6/2017.
  */
-appControllers.controller('loginCtrl', ['$location', 'authenticationService',
-    function ($location, authenticationService){
-        var vm = this;
-
-        vm.credentials = {
+appControllers.controller('loginCtrl', ['$scope','$rootScope', '$state', 'authenticationService',
+    function ($scope, $rootScope, $state, authenticationService) {
+        $scope.credentials = {
             email: "",
             password: ""
         };
 
-        vm.onSubmit = function(){
-            authenticationService
-                .login(vm.credentials)
-                .error(function(err){
-                    alert(err);
-                })
-                .then(function() {
-                    $location.path('/');
-                });
+        $scope.onSubmit = function(){
+
+            authenticationService.login($scope.input, function(err, data){
+                if (err) {
+                    console.log(err);
+                    $scope.message = "You have invalid login, please fill in all required information";
+                    $rootScope.loading = false;
+                }
+                else{
+                    $rootScope.loading = false;
+                    $state.go('home');
+                }
+            });
         }
     }
 ]);
@@ -742,25 +741,26 @@ appControllers.controller('passengersCtrl', ['$scope', '$state', 'bookingService
 /**
  * Created by Stupig on 1/6/2017.
  */
-appControllers.controller('registerCtrl', ['$location', 'authenticationService',
-    function ($location, authenticationService) {
-        var vm = this;
-
-        vm.credentials = {
+appControllers.controller('registerCtrl', ['$scope','$rootScope', '$state', 'authenticationService',
+    function ($scope, $rootScope, $state, authenticationService) {
+        $scope.input = {
             username: "",
             email: "",
             password: ""
         };
 
-        vm.onSubmit = function () {
-            authenticationService
-                .register(vm.credentials)
-                .error(function(err){
-                    alert(err);
-                })
-                .then(function(){
-                    $location.path('/');
-                });
+        $scope.onSubmit = function () {
+            authenticationService.register($scope.input, function(err, result){
+                if (err) {
+                    console.log(err);
+                    $scope.message = "You have invalid register, please fill in all required information";
+                    $rootScope.loading = false;
+                }
+                else{
+                    $rootScope.loading = false;
+                    $state.go('home');
+                }
+            });
         }
     }
 ]);
@@ -1164,18 +1164,44 @@ appServices.factory('authenticationService', ['validateService', '$http', '$wind
                 }
             },
 
-            register: function(user) {
-                return $http.post('/api/authentication/register', user)
-                    .success(function (data) {
-                        this.saveToken(data.token);
+            register: function(user, callback) {
+                var promise = new Promise((fulfill, reject) => {
+                    $.ajax({
+                        url: '/api/authentication/register',
+                        method: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(user),
+                        success: fulfill,
+                        error: reject
                     });
+                });
+
+                promise
+                    .then((response) => {
+                        this.saveToken(response.token);
+                        callback(null, response.data);
+                    })
+                    .catch((xhr, textStatus, errorThrown) => callback(xhr));
             },
 
-            login: function (user) {
-                return $http.post('/api/login', user)
-                    .success(function (data) {
-                        this.saveToken(data.token);
+            login: function (user, callback) {
+                var promise = new Promise((fulfill, reject) => {
+                    $.ajax({
+                        url: '/api/authentication/login',
+                        method: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(user),
+                        success: fulfill,
+                        error: reject
                     });
+                });
+
+                promise
+                    .then((response) => {
+                        this.saveToken(response.token);
+                        callback(null, response.data);
+                    })
+                    .catch((xhr, textStatus, errorThrown) => callback(xhr));
             }
         };
 
