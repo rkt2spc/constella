@@ -1,24 +1,26 @@
 /**
  * Created by Stupig on 1/6/2017.
  */
-appControllers.controller('loginCtrl', ['$location', 'authenticationService',
-    ($location, authenticationService) => {
-        let vm = this;
-
-        vm.credentials = {
+appControllers.controller('loginCtrl', ['$scope','$rootScope', '$state', 'authenticationService',
+    function ($scope, $rootScope, $state, authenticationService) {
+        $scope.credentials = {
             email: "",
             password: ""
         };
 
-        vm.onSubmit = ()=> {
-            authenticationService
-                .login(vm.credentials)
-                .error(err => {
-                    alert(err);
-                })
-                .then(()=> {
-                    $location.path('/');
-                });
+        $scope.onSubmit = function(){
+
+            authenticationService.login($scope.input, function(err, data){
+                if (err) {
+                    console.log(err);
+                    $scope.message = "You have invalid login, please fill in all required information";
+                    $rootScope.loading = false;
+                }
+                else{
+                    $rootScope.loading = false;
+                    $state.go('home');
+                }
+            });
         }
     }
 ]);

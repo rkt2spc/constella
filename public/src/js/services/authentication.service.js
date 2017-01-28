@@ -3,18 +3,18 @@
  */
 appServices.factory('authenticationService', ['validateService', '$http', '$window',
     function (validateService, $http, $window) {
-        let service = {
-            saveToken: token => {
+        var service = {
+            saveToken: function (token){
                 $window.localStorage['currentUserToken'] = token;
             },
 
-            getToken: token => {
+            getToken: function(token){
                 return $window.localStorage['currentUserToken'];
             },
 
-            isLoggedIn: () => {
-                let token = this.getToken();
-                let payload;
+            isLoggedIn: function(){
+                var token = this.getToken();
+                var payload;
 
                 if (token) {
                     payload = token.split('.')[1];
@@ -27,14 +27,14 @@ appServices.factory('authenticationService', ['validateService', '$http', '$wind
 
             },
 
-            logout: () => {
+            logout: function(){
                 $window.localStorage.removeItem('currentUserToken');
             },
 
-            currentUser: () => {
+            currentUser: function(){
                 if (this.isLoggedIn()) {
-                    let token = this.getToken();
-                    let payload = token.split('.')[1];
+                    var token = this.getToken();
+                    var payload = token.split('.')[1];
                     payload = $window.atob(payload);
                     payload = JSON.parse(payload);
                     return {
@@ -44,19 +44,45 @@ appServices.factory('authenticationService', ['validateService', '$http', '$wind
                 }
             },
 
-            register: user => {
-                return $http.post('/api/authentication/register', user)
-                    .success(function (data) {
-                        this.saveToken(data.token);
+            register: function(user, callback) {
+                var promise = new Promise((fulfill, reject) => {
+                    $.ajax({
+                        url: '/api/authentication/register',
+                        method: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(user),
+                        success: fulfill,
+                        error: reject
                     });
+                });
+
+                promise
+                    .then((response) => {
+                        this.saveToken(response.token);
+                        callback(null, response.data);
+                    })
+                    .catch((xhr, textStatus, errorThrown) => callback(xhr));
             },
 
-            login: user => {
-                return $http.post('/api/login', user)
-                    .success(function (data) {
-                        this.saveToken(data.token);
+            login: function (user, callback) {
+                var promise = new Promise((fulfill, reject) => {
+                    $.ajax({
+                        url: '/api/authentication/login',
+                        method: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(user),
+                        success: fulfill,
+                        error: reject
                     });
-            },
+                });
+
+                promise
+                    .then((response) => {
+                        this.saveToken(response.token);
+                        callback(null, response.data);
+                    })
+                    .catch((xhr, textStatus, errorThrown) => callback(xhr));
+            }
         };
 
         return service;

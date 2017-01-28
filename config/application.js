@@ -21,11 +21,10 @@ global.App = {
 //------------------------------------------------------------------------
 var config = {
         database:           Utils.getConfig('database'),
-        passport:           Utils.getConfig('passport'),
         routing:            Utils.getConfig('routing'),
         errorHandling: 		Utils.getConfig('errorHandling')
     };
-
+config.passport = require("./passport")(passport);
 //------------------------------------------------------------------------
 app.use(morgan('dev'));
 app.use(express.static(path.join(Utils.root_path, 'public', 'build')));
